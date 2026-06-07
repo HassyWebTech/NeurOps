@@ -1,0 +1,10 @@
+# Environment variables - never commit secrets
+.env
+
+# Python
+__pycache__/
+*.pyc
+venv/
+
+# Data files
+backend/data/

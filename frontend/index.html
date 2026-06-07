@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeurOps — Business Intelligence AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#faf9f7;
+  --white:#ffffff;
+  --navy:#0f0f1a;
+  --navy-2:#1a1a2e;
+  --navy-dim:#2a2a3e;
+  --accent:#d4522a;
+  --accent-dim:#d4522a18;
+  --border:#e8e5de;
+  --border-2:#d4d0c8;
+  --text:#1a1a2e;
+  --text-2:#5a5a4a;
+  --text-3:#9b9b8e;
+  --text-4:#c0bdb0;
+  --mono:'Geist Mono',monospace;
+  --sans:'Geist',sans-serif;
+  --display:'Bricolage Grotesque',sans-serif;
+  --radius:10px;
+  --radius-lg:16px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,249,247,0.88);backdrop-filter:blur(12px);border-bottom:0.5px solid var(--border);padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-mark{width:30px;height:30px;background:var(--navy);border-radius:7px;display:grid;place-items:center;color:#fff;font-family:var(--display);font-weight:700;font-size:14px}
+.nav-name{font-family:var(--display);font-weight:600;font-size:15px;color:var(--navy)}
+.nav-links{display:flex;align-items:center;gap:8px}
+.nav-link{font-size:13px;color:var(--text-2);text-decoration:none;padding:6px 14px;border-radius:7px;transition:all .15s}
+.nav-link:hover{background:var(--border);color:var(--text)}
+.nav-cta{background:var(--navy);color:#fff;font-size:13px;padding:7px 18px;border-radius:7px;text-decoration:none;font-weight:500;transition:all .15s;border:none;cursor:pointer;font-family:var(--sans)}
+.nav-cta:hover{background:var(--navy-dim)}
+
+/* ── SECTIONS ── */
+section{padding:100px 40px}
+.container{max-width:1100px;margin:0 auto}
+
+/* ── HERO ── */
+.hero{padding-top:140px;padding-bottom:100px;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:0.5px solid var(--border-2);border-radius:100px;padding:6px 14px;font-size:12px;font-family:var(--mono);color:var(--text-2);margin-bottom:32px}
+.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:#4ade80}
+.hero h1{font-family:var(--display);font-size:clamp(42px,6vw,72px);font-weight:700;line-height:1.08;letter-spacing:-0.03em;color:var(--navy);margin-bottom:24px;max-width:800px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero-sub{font-size:18px;color:var(--text-2);max-width:520px;margin:0 auto 40px;line-height:1.6;font-weight:300}
+.hero-actions{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+.btn-primary{background:var(--navy);color:#fff;padding:13px 28px;border-radius:var(--radius);font-size:14px;font-weight:500;text-decoration:none;transition:all .15s;display:inline-flex;align-items:center;gap:8px}
+.btn-primary:hover{background:var(--navy-dim);transform:translateY(-1px)}
+.btn-secondary{background:var(--white);color:var(--text);padding:13px 28px;border-radius:var(--radius);font-size:14px;font-weight:400;text-decoration:none;border:0.5px solid var(--border-2);transition:all .15s}
+.btn-secondary:hover{border-color:var(--text-3);background:var(--bg)}
+.hero-stack{margin-top:20px;font-size:11px;font-family:var(--mono);color:var(--text-4);display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap}
+.hero-stack span{display:flex;align-items:center;gap:5px}
+
+/* ── PREVIEW ── */
+.preview-wrap{max-width:900px;margin:60px auto 0;background:var(--white);border:0.5px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;box-shadow:0 24px 80px rgba(15,15,26,0.08)}
+.preview-bar{background:var(--bg);border-bottom:0.5px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:8px}
+.preview-dot{width:10px;height:10px;border-radius:50%}
+.preview-url{flex:1;background:var(--white);border:0.5px solid var(--border);border-radius:5px;padding:5px 12px;font-size:11px;font-family:var(--mono);color:var(--text-3);text-align:center}
+.preview-body{display:grid;grid-template-columns:220px 1fr;height:380px}
+.preview-sb{background:var(--white);border-right:0.5px solid var(--border);padding:20px 16px;display:flex;flex-direction:column;gap:20px}
+.preview-sb-logo{display:flex;align-items:center;gap:8px;padding-bottom:16px;border-bottom:0.5px solid var(--border)}
+.p-mark{width:24px;height:24px;background:var(--navy);border-radius:5px;display:grid;place-items:center;color:#fff;font-size:11px;font-weight:700;font-family:var(--display)}
+.p-name{font-size:13px;font-weight:500;color:var(--navy)}
+.p-lbl{font-size:9px;font-family:var(--mono);color:var(--text-4);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.p-sq{background:var(--bg);border:0.5px solid var(--border);border-radius:6px;padding:8px 10px;font-size:11px;color:var(--text-2);margin-bottom:5px;line-height:1.4}
+.preview-main{display:flex;flex-direction:column}
+.preview-hdr{padding:14px 20px;border-bottom:0.5px solid var(--border);background:var(--white)}
+.preview-hdr-t{font-size:13px;font-weight:500;color:var(--navy)}
+.preview-hdr-s{font-size:10px;font-family:var(--mono);color:var(--text-3);margin-top:2px}
+.preview-msgs{flex:1;padding:20px;display:flex;flex-direction:column;gap:14px;background:var(--bg);overflow:hidden}
+.p-msg-u{align-self:flex-end;background:var(--navy);color:#f0ede6;padding:10px 14px;border-radius:10px 10px 3px 10px;font-size:12px;max-width:70%;line-height:1.5}
+.p-msg-a{align-self:flex-start;max-width:90%}
+.p-role{font-size:9px;font-family:var(--mono);color:var(--text-4);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+.p-bubble{background:var(--white);border:0.5px solid var(--border);border-radius:3px 10px 10px 10px;padding:12px 14px;font-size:12px;color:var(--text-2);line-height:1.6}
+.p-sources{display:flex;gap:6px;margin-top:8px}
+.p-src{background:var(--white);border:0.5px solid var(--border);border-radius:6px;padding:6px 10px;font-size:10px;color:var(--text-3);font-family:var(--mono)}
+.preview-inp{padding:12px 20px;border-top:0.5px solid var(--border);background:var(--white);display:flex;align-items:center;gap:8px}
+.preview-inp-box{flex:1;background:var(--bg);border:0.5px solid var(--border);border-radius:7px;padding:8px 12px;font-size:11px;font-family:var(--sans);color:var(--text-4)}
+.preview-send{width:28px;height:28px;background:var(--navy);border-radius:6px;display:grid;place-items:center;flex-shrink:0}
+.preview-send svg{width:12px;height:12px;stroke:#fff;fill:none;stroke-width:2}
+
+/* ── PROBLEM ── */
+.problem{background:var(--navy);color:#f0ede6}
+.problem h2{font-family:var(--display);font-size:clamp(28px,4vw,48px);font-weight:700;letter-spacing:-0.02em;line-height:1.1;margin-bottom:16px}
+.problem h2 em{font-style:normal;color:var(--accent)}
+.problem-sub{font-size:16px;color:#9b9b8e;max-width:520px;margin-bottom:60px;font-weight:300}
+.problem-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:rgba(255,255,255,0.06);border-radius:var(--radius-lg);overflow:hidden}
+.problem-card{background:var(--navy);padding:32px;transition:background .2s}
+.problem-card:hover{background:#1a1a2e}
+.problem-icon{font-size:24px;margin-bottom:16px}
+.problem-card h3{font-family:var(--display);font-size:16px;font-weight:600;color:#f0ede6;margin-bottom:8px}
+.problem-card p{font-size:13px;color:#6b6b80;line-height:1.6}
+
+/* ── HOW IT WORKS ── */
+.how h2{font-family:var(--display);font-size:clamp(28px,4vw,48px);font-weight:700;letter-spacing:-0.02em;margin-bottom:12px;color:var(--navy)}
+.how-sub{font-size:16px;color:var(--text-2);margin-bottom:60px;font-weight:300;max-width:480px}
+.how-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px}
+.how-step{background:var(--white);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:32px;position:relative;overflow:hidden}
+.how-step::before{content:attr(data-n);position:absolute;top:-10px;right:20px;font-family:var(--display);font-size:80px;font-weight:700;color:var(--border);line-height:1}
+.how-step-tag{font-size:10px;font-family:var(--mono);color:var(--text-3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px;display:block}
+.how-step h3{font-family:var(--display);font-size:20px;font-weight:600;color:var(--navy);margin-bottom:10px;line-height:1.2}
+.how-step p{font-size:13px;color:var(--text-2);line-height:1.65}
+
+/* ── QUESTIONS ── */
+.questions{background:var(--white);border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border)}
+.questions h2{font-family:var(--display);font-size:clamp(28px,4vw,48px);font-weight:700;letter-spacing:-0.02em;margin-bottom:12px;color:var(--navy)}
+.questions-sub{font-size:16px;color:var(--text-2);margin-bottom:48px;font-weight:300;max-width:480px}
+.q-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.q-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius);padding:20px 24px;display:flex;align-items:flex-start;gap:14px;transition:all .15s;cursor:pointer}
+.q-card:hover{border-color:var(--border-2);background:var(--white);transform:translateY(-1px)}
+.q-num{font-size:11px;font-family:var(--mono);color:var(--text-4);padding-top:2px;flex-shrink:0}
+.q-text{font-size:14px;color:var(--text);line-height:1.5}
+
+/* ── TECH STACK ── */
+.stack h2{font-family:var(--display);font-size:clamp(28px,4vw,48px);font-weight:700;letter-spacing:-0.02em;margin-bottom:12px;color:var(--navy)}
+.stack-sub{font-size:16px;color:var(--text-2);margin-bottom:48px;font-weight:300}
+.stack-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.stack-card{background:var(--white);border:0.5px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center;transition:all .15s}
+.stack-card:hover{border-color:var(--border-2);transform:translateY(-2px)}
+.stack-card-icon{font-size:28px;margin-bottom:10px}
+.stack-card-name{font-size:13px;font-weight:500;color:var(--navy);margin-bottom:4px}
+.stack-card-role{font-size:11px;font-family:var(--mono);color:var(--text-3)}
+
+/* ── BUILT BY ── */
+.builtby{background:var(--navy);color:#f0ede6;text-align:center}
+.builtby h2{font-family:var(--display);font-size:clamp(28px,4vw,48px);font-weight:700;letter-spacing:-0.02em;margin-bottom:16px}
+.builtby-sub{font-size:16px;color:#9b9b8e;max-width:520px;margin:0 auto 40px;font-weight:300;line-height:1.6}
+.builder-card{display:inline-flex;align-items:center;gap:20px;background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.1);border-radius:var(--radius-lg);padding:24px 32px;text-align:left}
+.builder-avatar{width:56px;height:56px;border-radius:50%;background:var(--accent);display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:20px;color:#fff;flex-shrink:0}
+.builder-name{font-family:var(--display);font-size:18px;font-weight:600;color:#f0ede6;margin-bottom:4px}
+.builder-title{font-size:13px;color:#9b9b8e;margin-bottom:12px}
+.builder-links{display:flex;gap:8px}
+.builder-link{font-size:11px;font-family:var(--mono);color:#9b9b8e;text-decoration:none;border:0.5px solid rgba(255,255,255,0.15);border-radius:5px;padding:4px 10px;transition:all .15s}
+.builder-link:hover{color:#f0ede6;border-color:rgba(255,255,255,0.3)}
+
+/* ── CTA ── */
+.cta-section{text-align:center;background:var(--bg)}
+.cta-section h2{font-family:var(--display);font-size:clamp(28px,4vw,48px);font-weight:700;letter-spacing:-0.02em;margin-bottom:16px;color:var(--navy)}
+.cta-section p{font-size:16px;color:var(--text-2);margin-bottom:36px;font-weight:300}
+
+/* ── FOOTER ── */
+footer{background:var(--navy);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.footer-logo{display:flex;align-items:center;gap:10px}
+.footer-name{font-family:var(--display);font-size:14px;font-weight:600;color:#f0ede6}
+.footer-copy{font-size:12px;font-family:var(--mono);color:#4a4a5a}
+.footer-links{display:flex;gap:20px}
+.footer-link{font-size:12px;font-family:var(--mono);color:#4a4a5a;text-decoration:none;transition:color .15s}
+.footer-link:hover{color:#9b9b8e}
+
+/* ── APP PAGE ── */
+#app-page{display:none;position:fixed;inset:0;z-index:200;background:var(--bg)}
+.app-layout{display:grid;grid-template-columns:260px 1fr;height:100vh}
+.app-sb{background:var(--white);border-right:0.5px solid var(--border);display:flex;flex-direction:column;padding:0}
+.app-sb-top{padding:20px;border-bottom:0.5px solid var(--border)}
+.app-sb-logo{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.app-sb-mark{width:30px;height:30px;background:var(--navy);border-radius:7px;display:grid;place-items:center;color:#fff;font-family:var(--display);font-weight:700;font-size:13px}
+.app-sb-name{font-family:var(--display);font-weight:600;font-size:14px;color:var(--navy)}
+.app-sb-back{font-size:11px;font-family:var(--mono);color:var(--text-3);text-decoration:none;display:flex;align-items:center;gap:5px;margin-top:4px;cursor:pointer;background:none;border:none;padding:0}
+.app-sb-back:hover{color:var(--text-2)}
+.app-sb-body{flex:1;overflow-y:auto;padding:20px}
+.app-sb-lbl{font-size:10px;font-family:var(--mono);color:var(--text-4);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.app-sq{background:var(--bg);border:0.5px solid var(--border);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--text-2);margin-bottom:6px;cursor:pointer;line-height:1.4;transition:all .15s;text-align:left;width:100%;font-family:var(--sans)}
+.app-sq:hover{background:var(--accent-dim);border-color:var(--accent);color:var(--text)}
+.app-filters{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.app-fb{border:0.5px solid var(--border);border-radius:6px;padding:4px 10px;font-size:11px;font-family:var(--mono);color:var(--text-3);background:transparent;cursor:pointer;transition:all .15s}
+.app-fb:hover,.app-fb.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.app-sb-foot{padding:16px 20px;border-top:0.5px solid var(--border);display:flex;align-items:center;gap:8px;font-size:11px;font-family:var(--mono);color:var(--text-3)}
+.status-dot{width:6px;height:6px;border-radius:50%;background:#4ade80;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.app-main{display:flex;flex-direction:column;height:100vh;min-width:0}
+.app-hdr{padding:18px 32px;border-bottom:0.5px solid var(--border);background:var(--white);flex-shrink:0}
+.app-hdr-t{font-family:var(--display);font-size:16px;font-weight:600;color:var(--navy)}
+.app-hdr-s{font-size:11px;font-family:var(--mono);color:var(--text-3);margin-top:2px}
+.app-msgs{flex:1;overflow-y:auto;padding:32px;display:flex;flex-direction:column;gap:24px}
+.app-msgs::-webkit-scrollbar{width:4px}
+.app-msgs::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:2px}
+.welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 0;flex:1}
+.welcome-icon{font-size:40px;margin-bottom:20px}
+.welcome h2{font-family:var(--display);font-size:24px;font-weight:600;color:var(--navy);margin-bottom:8px}
+.welcome p{font-size:14px;color:var(--text-2);max-width:380px;line-height:1.6}
+.msg{display:flex;flex-direction:column;gap:8px;animation:slideIn .2s ease}
+@keyframes slideIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.msg-role{font-size:10px;font-family:var(--mono);color:var(--text-4);text-transform:uppercase;letter-spacing:.06em}
+.msg.user .msg-role{color:var(--accent)}
+.msg.user{align-items:flex-end}
+.msg-content{padding:14px 18px;border-radius:12px;font-size:14px;line-height:1.7;max-width:80%}
+.msg.user .msg-content{background:var(--navy);color:#f0ede6;border-radius:12px 12px 3px 12px}
+.msg.assistant .msg-content{background:var(--white);border:0.5px solid var(--border);border-radius:3px 12px 12px 12px;color:var(--text)}
+.sources{margin-top:10px;display:flex;flex-direction:column;gap:6px}
+.sources-lbl{font-size:10px;font-family:var(--mono);color:var(--text-4);text-transform:uppercase;letter-spacing:.06em}
+.src-card{background:var(--bg);border:0.5px solid var(--border);border-radius:8px;padding:10px 14px}
+.src-meta{display:flex;gap:10px;margin-bottom:4px}
+.src-score{font-size:11px;font-family:var(--mono);color:var(--accent)}
+.src-sim{font-size:11px;font-family:var(--mono);color:var(--text-4)}
+.src-text{font-size:12px;color:var(--text-2);line-height:1.5}
+.loading{display:flex;align-items:center;gap:10px;color:var(--text-2);font-size:13px;padding:8px 0}
+.loading-dots{display:flex;gap:4px}
+.loading-dots span{width:6px;height:6px;border-radius:50%;background:var(--navy);animation:bounce 1.2s infinite}
+.loading-dots span:nth-child(2){animation-delay:.2s}
+.loading-dots span:nth-child(3){animation-delay:.4s}
+@keyframes bounce{0%,100%{transform:translateY(0);opacity:.3}50%{transform:translateY(-4px);opacity:1}}
+.app-inp-area{padding:16px 32px 24px;border-top:0.5px solid var(--border);background:var(--white);flex-shrink:0}
+.app-inp-wrap{display:flex;align-items:flex-end;gap:10px;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius);padding:12px 16px;transition:border-color .15s}
+.app-inp-wrap:focus-within{border-color:var(--navy)}
+textarea{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:var(--sans);font-size:14px;line-height:1.5;resize:none;max-height:120px}
+textarea::placeholder{color:var(--text-4)}
+.send-btn{background:var(--navy);border:none;border-radius:7px;color:#fff;width:34px;height:34px;display:grid;place-items:center;cursor:pointer;flex-shrink:0;transition:all .15s}
+.send-btn:hover{background:var(--navy-dim);transform:scale(1.05)}
+.send-btn:disabled{opacity:.3;cursor:not-allowed;transform:none}
+.send-btn svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2}
+.inp-hint{font-size:10px;font-family:var(--mono);color:var(--text-4);text-align:center;margin-top:8px}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════ LANDING PAGE ═══════════════════════ -->
+<div id="landing-page">
+
+<nav>
+  <div class="nav-logo">
+    <div class="nav-mark">N</div>
+    <span class="nav-name">NeurOps</span>
+  </div>
+  <div class="nav-links">
+    <a href="#how" class="nav-link">How it works</a>
+    <a href="#stack" class="nav-link">Stack</a>
+    <a href="#built-by" class="nav-link">Builder</a>
+    <button class="nav-cta" onclick="openApp()">Launch App →</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      RAG · Multi-Agent · Vector Search · LLM
+    </div>
+    <h1>Your business data,<br><em>finally intelligent</em></h1>
+    <p class="hero-sub">NeurOps is a multi-agent business intelligence AI that turns raw customer data into clear, actionable insights — in seconds.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="openApp()">Try NeurOps Free →</button>
+      <a href="https://github.com/HassyWebTech/neurops-ai" target="_blank" class="btn-secondary">View on GitHub</a>
+    </div>
+    <div class="hero-stack">
+      <span>⚡ Groq Llama 3.3 70B</span>
+      <span>🔍 Qdrant Vector Search</span>
+      <span>📊 37,970 Customer Reviews</span>
+      <span>🐍 FastAPI Backend</span>
+    </div>
+
+    <!-- APP PREVIEW -->
+    <div class="preview-wrap">
+      <div class="preview-bar">
+        <div class="preview-dot" style="background:#ff5f57"></div>
+        <div class="preview-dot" style="background:#febc2e"></div>
+        <div class="preview-dot" style="background:#28c840"></div>
+        <div class="preview-url">neurops-ai.vercel.app/app</div>
+      </div>
+      <div class="preview-body">
+        <div class="preview-sb">
+          <div class="preview-sb-logo">
+            <div class="p-mark">N</div>
+            <div class="p-name">NeurOps</div>
+          </div>
+          <div>
+            <div class="p-lbl">Suggested</div>
+            <div class="p-sq">What are customers saying about late deliveries?</div>
+            <div class="p-sq">What are the most common complaints?</div>
+            <div class="p-sq">Which products get the best reviews?</div>
+          </div>
+        </div>
+        <div class="preview-main">
+          <div class="preview-hdr">
+            <div class="preview-hdr-t">Ask NeurOps</div>
+            <div class="preview-hdr-s">37,970 reviews · Llama 3.3 70B</div>
+          </div>
+          <div class="preview-msgs">
+            <div class="p-msg-u">What are customers saying about late deliveries?</div>
+            <div class="p-msg-a">
+              <div class="p-role">NeurOps</div>
+              <div class="p-bubble">Customers are frustrated with late deliveries and poor communication. Key issues include no delivery updates, unresponsive support, and orders arriving weeks late. Recommend automated status notifications and SLA enforcement.</div>
+              <div class="p-sources">
+                <div class="p-src">★ 1/5 · 26.8% match</div>
+                <div class="p-src">★ 1/5 · 25.1% match</div>
+                <div class="p-src">+3 more</div>
+              </div>
+            </div>
+          </div>
+          <div class="preview-inp">
+            <div class="preview-inp-box">Ask a business question...</div>
+            <div class="preview-send">
+              <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem">
+  <div class="container">
+    <h2>Founders waste hours<br><em>on work AI should do</em></h2>
+    <p class="problem-sub">Customer data sits in spreadsheets, CSVs, and chat logs — untouched and unanalysed. NeurOps fixes that.</p>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="problem-icon">📂</div>
+        <h3>Searching documents</h3>
+        <p>Hours spent ctrl+F-ing through files to find one piece of customer feedback.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">📊</div>
+        <h3>Manual reporting</h3>
+        <p>Writing weekly summaries by hand when patterns are already in the data.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">🔍</div>
+        <h3>Missing churn signals</h3>
+        <p>At-risk customers quietly disappear before anyone spots the warning signs.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">💬</div>
+        <h3>Unread feedback</h3>
+        <p>Thousands of reviews containing gold — never analysed, never acted on.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="container">
+    <h2>How it works</h2>
+    <p class="how-sub">Three steps from raw data to clear business intelligence.</p>
+    <div class="how-steps">
+      <div class="how-step" data-n="1">
+        <span class="how-step-tag">Step 01</span>
+        <h3>Upload your business data</h3>
+        <p>Connect your customer records, order history, reviews, or CSV files. NeurOps ingests them, chunks them, and creates vector embeddings stored in Qdrant.</p>
+      </div>
+      <div class="how-step" data-n="2">
+        <span class="how-step-tag">Step 02</span>
+        <h3>Ask in plain English</h3>
+        <p>Type any business question naturally. The agent retrieves the most relevant data using semantic search — not keyword matching — across your entire dataset.</p>
+      </div>
+      <div class="how-step" data-n="3">
+        <span class="how-step-tag">Step 03</span>
+        <h3>Get actionable insights</h3>
+        <p>Llama 3.3 70B reads the retrieved context and generates a clear, specific answer — with source citations so you can verify every claim.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUESTIONS -->
+<section class="questions">
+  <div class="container">
+    <h2>What you can ask</h2>
+    <p class="questions-sub">Real questions. Real answers. Backed by your actual customer data.</p>
+    <div class="q-grid">
+      <div class="q-card" onclick="openApp()">
+        <span class="q-num">01</span>
+        <span class="q-text">What are customers saying about late deliveries?</span>
+      </div>
+      <div class="q-card" onclick="openApp()">
+        <span class="q-num">02</span>
+        <span class="q-text">Which customers are most likely to churn next month?</span>
+      </div>
+      <div class="q-card" onclick="openApp()">
+        <span class="q-num">03</span>
+        <span class="q-text">What are the most common complaints in 1-star reviews?</span>
+      </div>
+      <div class="q-card" onclick="openApp()">
+        <span class="q-num">04</span>
+        <span class="q-text">What do customers love most about our products?</span>
+      </div>
+      <div class="q-card" onclick="openApp()">
+        <span class="q-num">05</span>
+        <span class="q-text">Which product categories have the highest return rates?</span>
+      </div>
+      <div class="q-card" onclick="openApp()">
+        <span class="q-num">06</span>
+        <span class="q-text">Generate a re-engagement campaign for inactive customers.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section class="stack" id="stack">
+  <div class="container">
+    <h2>Built with production-grade tools</h2>
+    <p class="stack-sub">Every technology choice was intentional — this is how real AI systems are built.</p>
+    <div class="stack-grid">
+      <div class="stack-card">
+        <div class="stack-card-icon">⚡</div>
+        <div class="stack-card-name">Groq</div>
+        <div class="stack-card-role">Llama 3.3 70B LLM</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-card-icon">🔍</div>
+        <div class="stack-card-name">Qdrant</div>
+        <div class="stack-card-role">Vector database</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-card-icon">🧠</div>
+        <div class="stack-card-name">Sentence Transformers</div>
+        <div class="stack-card-role">Local embeddings</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-card-icon">🐍</div>
+        <div class="stack-card-name">FastAPI</div>
+        <div class="stack-card-role">Backend API</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-card-icon">🌐</div>
+        <div class="stack-card-name">Vanilla JS</div>
+        <div class="stack-card-role">Frontend interface</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-card-icon">📊</div>
+        <div class="stack-card-name">Olist Dataset</div>
+        <div class="stack-card-role">37,970 reviews</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BUILT BY -->
+<section class="builtby" id="built-by">
+  <div class="container" style="text-align:center">
+    <h2>Built by an AI engineer</h2>
+    <p class="builtby-sub">This project demonstrates end-to-end AI engineering — from raw data ingestion to production-ready RAG pipelines and semantic search.</p>
+    <div class="builder-card">
+      <div class="builder-avatar">H</div>
+      <div>
+        <div class="builder-name">Hassan</div>
+        <div class="builder-title">AI Systems Engineer · Lagos, Nigeria</div>
+        <div class="builder-links">
+          <a href="https://github.com/HassyWebTech" target="_blank" class="builder-link">GitHub</a>
+          <a href="https://www.linkedin.com/in/hassan-yakubu" target="_blank" class="builder-link">LinkedIn</a>
+          <a href="https://x.com/yakubhassan83" target="_blank" class="builder-link">X / Twitter</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <h2>See it in action</h2>
+    <p>Ask NeurOps a real question. Watch it retrieve, reason, and respond.</p>
+    <button class="btn-primary" onclick="openApp()" style="font-size:15px;padding:15px 36px">Launch NeurOps →</button>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">
+    <div class="nav-mark">N</div>
+    <span class="footer-name">NeurOps</span>
+  </div>
+  <span class="footer-copy">Built by Hassan · AI Systems Engineer · Lagos, Nigeria</span>
+  <div class="footer-links">
+    <a href="https://github.com/HassyWebTech/neurops-ai" target="_blank" class="footer-link">GitHub</a>
+    <a href="#stack" class="footer-link">Stack</a>
+    <a href="#built-by" class="footer-link">Builder</a>
+  </div>
+</footer>
+
+</div>
+
+<!-- ═══════════════════════ APP PAGE ═══════════════════════ -->
+<div id="app-page">
+  <div class="app-layout">
+    <aside class="app-sb">
+      <div class="app-sb-top">
+        <div class="app-sb-logo">
+          <div class="app-sb-mark">N</div>
+          <div>
+            <div class="app-sb-name">NeurOps</div>
+            <button class="app-sb-back" onclick="closeApp()">← Back to home</button>
+          </div>
+        </div>
+      </div>
+      <div class="app-sb-body">
+        <div class="app-sb-lbl" style="margin-bottom:10px">Suggested Questions</div>
+        <button class="app-sq" onclick="askSuggestion(this)">What are customers saying about late deliveries?</button>
+        <button class="app-sq" onclick="askSuggestion(this)">What are the most common complaints?</button>
+        <button class="app-sq" onclick="askSuggestion(this)">What do customers love most about products?</button>
+        <button class="app-sq" onclick="askSuggestion(this)">Show me patterns in 1-star reviews</button>
+        <button class="app-sq" onclick="askSuggestion(this)">Which product categories get the best ratings?</button>
+
+        <div class="app-sb-lbl" style="margin-top:24px">Filter by Rating</div>
+        <div class="app-filters">
+          <button class="app-fb active" onclick="setFilter(null,this)">All</button>
+          <button class="app-fb" onclick="setFilter(1,this)">★ 1</button>
+          <button class="app-fb" onclick="setFilter(2,this)">★ 2</button>
+          <button class="app-fb" onclick="setFilter(3,this)">★ 3</button>
+          <button class="app-fb" onclick="setFilter(4,this)">★ 4</button>
+          <button class="app-fb" onclick="setFilter(5,this)">★ 5</button>
+        </div>
+      </div>
+      <div class="app-sb-foot">
+        <div class="status-dot"></div>
+        API connected · Llama 3.3 70B
+      </div>
+    </aside>
+
+    <main class="app-main">
+      <div class="app-hdr">
+        <div class="app-hdr-t">Ask NeurOps</div>
+        <div class="app-hdr-s">Powered by 37,970 customer reviews · Qdrant vector search · Groq Llama 3.3 70B</div>
+      </div>
+
+      <div class="app-msgs" id="messages">
+        <div class="welcome">
+          <div class="welcome-icon">🧠</div>
+          <h2>What would you like to know?</h2>
+          <p>Ask anything about your customers, products, delivery patterns, or business performance.</p>
+        </div>
+      </div>
+
+      <div class="app-inp-area">
+        <div class="app-inp-wrap">
+          <textarea id="questionInput" placeholder="Ask a business question..." rows="1" onkeydown="handleKeyDown(event)" oninput="autoResize(this)"></textarea>
+          <button class="send-btn" id="sendBtn" onclick="sendQuestion()">
+            <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+        <p class="inp-hint">Enter to send · Shift+Enter for new line</p>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+const API_URL = 'http://127.0.0.1:8000/api';
+let currentFilter = null;
+
+function openApp() {
+  document.getElementById('landing-page').style.display = 'none';
+  document.getElementById('app-page').style.display = 'block';
+  document.getElementById('questionInput').focus();
+}
+
+function closeApp() {
+  document.getElementById('app-page').style.display = 'none';
+  document.getElementById('landing-page').style.display = 'block';
+}
+
+function setFilter(value, btn) {
+  currentFilter = value;
+  document.querySelectorAll('.app-fb').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function askSuggestion(btn) {
+  const input = document.getElementById('questionInput');
+  input.value = btn.textContent.trim();
+  autoResize(input);
+  sendQuestion();
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+function handleKeyDown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendQuestion(); }
+}
+
+function renderMessage(role, content, sources = []) {
+  const msgs = document.getElementById('messages');
+  const welcome = msgs.querySelector('.welcome');
+  if (welcome) welcome.remove();
+
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+
+  let sourcesHTML = '';
+  if (sources.length > 0) {
+    const cards = sources.map(s => `
+      <div class="src-card">
+        <div class="src-meta">
+          <span class="src-score">★ ${s.score}/5</span>
+          <span class="src-sim">${(s.similarity * 100).toFixed(1)}% match</span>
+        </div>
+        <div class="src-text">${s.text}</div>
+      </div>`).join('');
+    sourcesHTML = `<div class="sources"><div class="sources-lbl">Source Reviews (${sources.length})</div>${cards}</div>`;
+  }
+
+  div.innerHTML = `
+    <div class="msg-role">${role === 'user' ? 'You' : 'NeurOps'}</div>
+    <div class="msg-content">${content}</div>
+    ${sourcesHTML}`;
+
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function renderLoading() {
+  const msgs = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.id = 'loading';
+  div.className = 'loading';
+  div.innerHTML = `<div class="loading-dots"><span></span><span></span><span></span></div>Analysing reviews...`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  return div;
+}
+
+async function sendQuestion() {
+  const input = document.getElementById('questionInput');
+  const sendBtn = document.getElementById('sendBtn');
+  const question = input.value.trim();
+  if (!question) return;
+
+  renderMessage('user', question);
+  input.value = '';
+  input.style.height = 'auto';
+  sendBtn.disabled = true;
+
+  const loader = renderLoading();
+
+  try {
+    const res = await fetch(`${API_URL}/ask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question, top_k: 5, score_filter: currentFilter })
+    });
+
+    loader.remove();
+
+    if (!res.ok) {
+      const err = await res.json();
+      renderMessage('assistant', `Error: ${err.detail || 'Something went wrong.'}`);
+      return;
+    }
+
+    const data = await res.json();
+    renderMessage('assistant', data.answer, data.sources);
+
+  } catch (err) {
+    loader.remove();
+    renderMessage('assistant', 'Could not connect to NeurOps API. Make sure the backend is running on port 8000.');
+  } finally {
+    sendBtn.disabled = false;
+    input.focus();
+  }
+}
+</script>
+</body>
+</html>
