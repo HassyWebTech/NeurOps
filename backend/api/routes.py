@@ -1,11 +1,11 @@
 from fastapi import APIRouter, HTTPException
-from groq import Groq
+from langchain_core.messages import HumanMessage, ToolMessage
 import sys
 import os
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from config import GROQ_API_KEY, GROQ_MODEL
-from rag.retrieve import retrieve, format_context
+from agents.graph import app as agent_app
+from rag.retrieve import retrieve
 from api.schemas import (
     QuestionRequest,
     AnswerResponse,
@@ -14,8 +14,6 @@ from api.schemas import (
     HealthResponse
 )
 
-# APIRouter groups all our endpoints together
-# main.py will register this router with the FastAPI app
 router = APIRouter()
 
 
@@ -23,7 +21,6 @@ router = APIRouter()
 def health_check():
     """
     Simple endpoint to verify the API is running.
-    No logic — just returns a status message.
     """
     return HealthResponse(
         status="ok",
@@ -34,77 +31,43 @@ def health_check():
 @router.post("/ask", response_model=AnswerResponse)
 def ask(request: QuestionRequest):
     """
-    The core RAG endpoint — the full pipeline in one call.
+    The agent endpoint. The question is sent into our LangGraph agent,
+    which decides whether to search reviews, calls the tool if needed,
+    and produces a final answer.
 
-    Step 1: Retrieve relevant reviews from Qdrant
-    Step 2: Format them as context
-    Step 3: Send context + question to Groq LLM
-    Step 4: Return the answer + source reviews
+    For source citations, we separately call retrieve() with the
+    original question — this gives the frontend reviews to display
+    even if the agent's tool query was phrased differently.
     """
-
-    # Step 1: Retrieve relevant reviews
-    # We ask for more than top_k so the LLM has richer context
-    results = retrieve(
-        query=request.question,
-        top_k=request.top_k,
-        score_filter=request.score_filter
-    )
-
-    if not results:
-        raise HTTPException(
-            status_code=404,
-            detail="No relevant reviews found for this question"
-        )
-
-    # Step 2: Format retrieved reviews as readable context
-    context = format_context(results)
-
-    # Step 3: Build the prompt for the LLM
-    # This is prompt engineering — how we structure the input
-    # determines the quality of the output
-    system_prompt = """You are NeurOps, an intelligent business analyst AI.
-You analyze customer reviews and provide clear, actionable insights to business owners.
-
-When answering:
-- Be direct and specific
-- Reference patterns across multiple reviews
-- Highlight both problems and positives
-- Suggest actionable improvements when relevant
-- Keep answers concise but comprehensive"""
-
-    user_prompt = f"""Based on the following customer reviews, answer this question:
-
-Question: {request.question}
-
-Customer Reviews:
-{context}
-
-Provide a clear, insightful answer based on the reviews above."""
-
-    # Step 4: Call Groq LLM
     try:
-        client = Groq(api_key=GROQ_API_KEY)
-        response = client.chat.completions.create(
-            model=GROQ_MODEL,
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt}
-            ],
-            temperature=0.3,  # Lower = more factual, less creative
-            max_tokens=1024
+        # Step 1: Run the agent
+        result = agent_app.invoke({
+            "messages": [HumanMessage(content=request.question)]
+        })
+
+        # Step 2: Extract the final answer (last message in the conversation)
+        final_message = result["messages"][-1]
+        answer = final_message.content
+
+        # Step 3: Get source reviews for citation
+        # We use the original question + user's filter directly,
+        # independent of what query the agent's tool used internally.
+        # This guarantees sources are always shown to the user.
+        sources = retrieve(
+            query=request.question,
+            top_k=request.top_k,
+            score_filter=request.score_filter
         )
-        answer = response.choices[0].message.content
 
     except Exception as e:
         raise HTTPException(
             status_code=500,
-            detail=f"LLM error: {str(e)}"
+            detail=f"Agent error: {str(e)}"
         )
 
-    # Step 5: Return answer + sources
     return AnswerResponse(
         answer=answer,
-        sources=[ReviewResult(**r) for r in results],
+        sources=[ReviewResult(**r) for r in sources],
         question=request.question
     )
 
@@ -113,7 +76,6 @@ Provide a clear, insightful answer based on the reviews above."""
 def trigger_ingest():
     """
     Triggers the ingestion pipeline programmatically.
-    Useful for re-ingesting after data updates.
     """
     try:
         from rag.ingest import ingest
