@@ -9,12 +9,14 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from config import GROQ_API_KEY, GROQ_MODEL
 from agents.state import AgentState
 from tools.retrieval import search_customer_reviews
+from tools.memory import save_business_context
+from memory.store import load_context, format_context_for_prompt
 
 
 # All tools the agent has access to.
 # Adding a new tool here (Week 4-5) is all that's needed —
 # the agent automatically learns to use it via its description.
-TOOLS = [search_customer_reviews]
+TOOLS = [search_customer_reviews, save_business_context]
 
 # The LLM that powers the agent's reasoning.
 # bind_tools() tells the LLM what tools exist and lets it
@@ -50,9 +52,17 @@ def agent_node(state: AgentState) -> AgentState:
     """
     messages = state["messages"]
 
-    # Prepend the system prompt on every call so the agent
-    # always knows its role and available tools
-    full_messages = [SystemMessage(content=SYSTEM_PROMPT)] + list(messages)
+    # Load any previously saved business context and inject it
+    # into the system prompt — this is long-term memory in action.
+    # Every run, the agent "remembers" facts from past sessions.
+    business_context = load_context()
+    context_text = format_context_for_prompt(business_context)
+
+    system_content = SYSTEM_PROMPT
+    if context_text:
+        system_content += f"\n\n{context_text}"
+
+    full_messages = [SystemMessage(content=system_content)] + list(messages)
 
     response = llm.invoke(full_messages)
 
@@ -92,5 +102,11 @@ graph.add_conditional_edges("agent", should_continue)
 # process the tool results and decide what to do next
 graph.add_edge("tools", "agent")
 
-# Compile into a runnable application
-app = graph.compile()
+# MemorySaver stores conversation state in memory, keyed by thread_id.
+# Each unique thread_id gets its own conversation history.
+from langgraph.checkpoint.memory import MemorySaver
+
+checkpointer = MemorySaver()
+
+# Compile into a runnable application with memory enabled
+app = graph.compile(checkpointer=checkpointer)

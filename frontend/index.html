@@ -556,6 +556,10 @@ textarea::placeholder{color:var(--text-4)}
 const API_URL = 'http://127.0.0.1:8000/api';
 let currentFilter = null;
 
+// Generate a unique thread ID for this browser session.
+// Refreshing the page starts a new conversation.
+const threadId = 'thread_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+
 function openApp() {
   document.getElementById('landing-page').style.display = 'none';
   document.getElementById('app-page').style.display = 'block';
@@ -652,7 +656,7 @@ async function sendQuestion() {
     const res = await fetch(`${API_URL}/ask`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ question, top_k: 5, score_filter: currentFilter })
+      body: JSON.stringify({ question, top_k: 5, score_filter: currentFilter, thread_id: threadId })
     });
 
     loader.remove();

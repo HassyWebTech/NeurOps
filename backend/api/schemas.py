@@ -5,18 +5,11 @@ from typing import List, Optional
 class QuestionRequest(BaseModel):
     """
     What the frontend sends to the backend when a user asks a question.
-    
-    Example request body:
-    {
-        "question": "What are customers saying about late deliveries?",
-        "top_k": 5,
-        "score_filter": null
-    }
     """
-    question: str                          # The user's question — required
-    top_k: int = 5                         # How many reviews to retrieve — default 5
-    score_filter: Optional[int] = None     # Filter by star rating — optional
-
+    question: str
+    top_k: int = 5
+    score_filter: Optional[int] = None
+    thread_id: str = "default"  # Identifies the conversation for memory
 
 class ReviewResult(BaseModel):
     """

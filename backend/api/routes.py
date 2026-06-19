@@ -40,10 +40,15 @@ def ask(request: QuestionRequest):
     even if the agent's tool query was phrased differently.
     """
     try:
-        # Step 1: Run the agent
-        result = agent_app.invoke({
-            "messages": [HumanMessage(content=request.question)]
-        })
+       # Step 1: Run the agent
+        # config tells the checkpointer which conversation thread
+        # to load history from and save updates to
+        config = {"configurable": {"thread_id": request.thread_id}}
+
+        result = agent_app.invoke(
+            {"messages": [HumanMessage(content=request.question)]},
+            config=config
+        )
 
         # Step 2: Extract the final answer (last message in the conversation)
         final_message = result["messages"][-1]
