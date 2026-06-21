@@ -12,11 +12,12 @@ from tools.retrieval import search_customer_reviews
 from tools.memory import save_business_context
 from tools.churn import churn_analysis
 from tools.analytics import customer_analytics
+from tools.campaign import generate_campaign
 from memory.store import load_context, format_context_for_prompt
 
 
 TOOLS = [search_customer_reviews, save_business_context,
-         churn_analysis, customer_analytics]
+         churn_analysis, customer_analytics, generate_campaign]
 
 # The LLM that powers the agent's reasoning.
 # bind_tools() tells the LLM what tools exist and lets it
