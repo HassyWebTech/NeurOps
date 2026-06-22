@@ -15,7 +15,7 @@
 [![License](https://img.shields.io/badge/License-MIT-22c55e?style=flat-square)](LICENSE)
 [![Status](https://img.shields.io/badge/Status-Complete-22c55e?style=flat-square)]()
 
-[**Live Demo**](https://github.com/HassyWebTech/NeurOps) · [**View on GitHub**](https://github.com/HassyWebTech/NeurOps) · [**Built by Hassan**](https://linkedin.com/in/hassan-yakubu)
+[**Live Demo**](https://neur-ops.vercel.app) · [**View on GitHub**](https://github.com/HassyWebTech/NeurOps) · [**Built by Hassan**](https://linkedin.com/in/hassan-yakubu)
 
 </div>
 
